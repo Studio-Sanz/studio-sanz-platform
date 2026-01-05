@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Building {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  mainImage   String?
+  logo        String?
+
+  // Location
+  latitude    Float?
+  longitude   Float?
+  address     String?
+
+  // Contact
+  whatsapp    String?
+  phone       String?
+  email       String?
+  website     String?
+
+  // Media
+  initialVideo String?
+  facadeImage  String?
+  brochure     String?
+
+  // Relations
+  facadePoints FacadePoint[]
+  amenities    Amenity[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([slug])
+}
+
+model FacadePoint {
+  id          String   @id @default(cuid())
+  name        String
+  x           Float    // X coordinate on image (percentage)
+  y           Float    // Y coordinate on image (percentage)
+  images      String[] // Array of up to 5 images
+  tour3dUrl   String?  // Kuula 3D tour link
+  floorPlan   String?  // Floor plan image
+  brochure    String?  // Brochure PDF link
+  viewImages  String[] @default([]) // Exterior view images
+
+  // Installation details
+  totalArea     Float?   // Total area in m2
+  internalArea  Float?   // Internal area in m2
+  externalArea  Float?   // External area in m2
+  bedrooms      Int?     // Number of bedrooms
+  bathrooms     Int?     // Number of bathrooms
+  hasBalcony    Boolean  @default(false)
+  hasLaundry    Boolean  @default(false)
+  hasTerrace    Boolean  @default(false)
+  hasGameRoom   Boolean  @default(false)
+
+  buildingId  String
+  building    Building @relation(fields: [buildingId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([buildingId])
+}
+
+model Amenity {
+  id          String   @id @default(cuid())
+  name        String
+  image       String?
+  order       Int      @default(0)
+
+  buildingId  String
+  building    Building @relation(fields: [buildingId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([buildingId])
+}
