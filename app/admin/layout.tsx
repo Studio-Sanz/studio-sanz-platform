@@ -35,7 +35,6 @@ export default function AdminLayout({
   // Verificación adicional de sesión (complementa al middleware)
   useEffect(() => {
     if (!isPending && !session) {
-      console.log("No session found in admin layout, redirecting to login");
       router.push("/login");
     }
   }, [session, isPending, router]);

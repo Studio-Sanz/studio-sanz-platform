@@ -5,7 +5,6 @@ const f = createUploadthing()
 export const ourFileRouter = {
   pdfUploader: f({ pdf: { maxFileSize: "32MB", maxFileCount: 1 } })
     .onUploadComplete(async ({ file }) => {
-      console.log("PDF uploaded:", file.url)
       return { url: file.url }
     }),
 } satisfies FileRouter

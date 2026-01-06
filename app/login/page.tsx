@@ -27,8 +27,6 @@ export default function AdminLoginPage() {
         callbackURL: "/admin",
       });
 
-      console.log("Login result:", result);
-
       if (result.error) {
         setError(result.error.message || "Invalid email or password");
         setLoading(false);
@@ -42,7 +40,6 @@ export default function AdminLoginPage() {
       window.location.href = "/admin";
     } catch (err) {
       setError("Invalid email or password");
-      console.error("Login error:", err);
       setLoading(false);
     }
   };

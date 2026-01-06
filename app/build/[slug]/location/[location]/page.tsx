@@ -112,7 +112,7 @@ export default function LocationDetailPage() {
           url: url,
         })
       } catch (error) {
-        console.log("Error sharing:", error)
+        // Silently fail if sharing is cancelled
       }
     } else {
       // Fallback: copy to clipboard
