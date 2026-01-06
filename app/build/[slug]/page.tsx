@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import Image from "next/image"
-import { MapPin, Phone, Mail, Globe, MessageCircle } from "lucide-react"
+import { MapPin, Phone, Mail, Globe, MessageCircle, Menu } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
 interface Building {

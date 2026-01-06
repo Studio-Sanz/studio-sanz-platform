@@ -515,7 +515,7 @@ export default function BuildingDetailPage() {
             <>
               <div className="relative">
                 <div
-                  className="relative w-full h-[500px] cursor-crosshair border-2 border-dashed border-muted-foreground/20 rounded-lg overflow-hidden"
+                  className="relative w-full h-125 cursor-crosshair border-2 border-dashed border-muted-foreground/20 rounded-lg overflow-hidden"
                   onClick={handleImageClick}
                 >
                   <Image

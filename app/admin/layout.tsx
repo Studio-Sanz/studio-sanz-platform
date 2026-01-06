@@ -16,15 +16,26 @@ import {
   SidebarRail,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import { Home, Building2 } from "lucide-react"
+import { Home, Building2, LogOut, User } from "lucide-react"
 import Link from "next/link"
 import { Separator } from "@/components/ui/separator"
+import { useSession, signOut } from "@/lib/auth-client"
+import { useRouter } from "next/navigation"
+import { Button } from "@/components/ui/button"
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const router = useRouter();
+  const { data: session, isPending } = useSession();
+
+  const handleLogout = async () => {
+    await signOut();
+    router.push("/login");
+  };
+
   return (
     <SidebarProvider>
       <Sidebar>
@@ -66,6 +77,26 @@ export default function AdminLayout({
         </SidebarContent>
 
         <SidebarFooter className="border-t border-sidebar-border">
+          {!isPending && session?.user && (
+            <div className="p-2 space-y-2">
+              <div className="flex items-center gap-2 text-sm">
+                <User className="size-4" />
+                <div className="flex flex-col">
+                  <span className="font-medium">{session.user.name || session.user.email}</span>
+                  <span className="text-xs text-sidebar-foreground/70">{session.user.email}</span>
+                </div>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full"
+                onClick={handleLogout}
+              >
+                <LogOut className="size-4 mr-2" />
+                Logout
+              </Button>
+            </div>
+          )}
           <div className="p-2 text-xs text-sidebar-foreground/70">
             © 2026 Buildings App
           </div>
