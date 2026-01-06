@@ -22,6 +22,7 @@ import { Separator } from "@/components/ui/separator"
 import { useSession, signOut } from "@/lib/auth-client"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import { useEffect } from "react"
 
 export default function AdminLayout({
   children,
@@ -31,10 +32,35 @@ export default function AdminLayout({
   const router = useRouter();
   const { data: session, isPending } = useSession();
 
+  // Verificación adicional de sesión (complementa al middleware)
+  useEffect(() => {
+    if (!isPending && !session) {
+      console.log("No session found in admin layout, redirecting to login");
+      router.push("/login");
+    }
+  }, [session, isPending, router]);
+
   const handleLogout = async () => {
     await signOut();
     router.push("/login");
   };
+
+  // Mostrar indicador de carga mientras se verifica la sesión
+  if (isPending) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <Building2 className="size-12 animate-pulse mx-auto mb-4 text-primary" />
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Si no hay sesión, no renderizar nada (el useEffect redirigirá)
+  if (!session) {
+    return null;
+  }
 
   return (
     <SidebarProvider>

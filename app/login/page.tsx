@@ -21,17 +21,28 @@ export default function AdminLoginPage() {
     setLoading(true);
 
     try {
-      await authClient.signIn.email({
+      const result = await authClient.signIn.email({
         email,
         password,
+        callbackURL: "/admin",
       });
+
+      console.log("Login result:", result);
+
+      if (result.error) {
+        setError(result.error.message || "Invalid email or password");
+        setLoading(false);
+        return;
+      }
+
+      // Esperar un momento para que las cookies se establezcan
+      await new Promise(resolve => setTimeout(resolve, 500));
 
       // Usar window.location para forzar recarga completa y asegurar que las cookies estén disponibles
       window.location.href = "/admin";
     } catch (err) {
       setError("Invalid email or password");
       console.error("Login error:", err);
-    } finally {
       setLoading(false);
     }
   };
