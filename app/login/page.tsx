@@ -26,7 +26,8 @@ export default function AdminLoginPage() {
         password,
       });
 
-      router.push("/admin");
+      // Usar window.location para forzar recarga completa y asegurar que las cookies estén disponibles
+      window.location.href = "/admin";
     } catch (err) {
       setError("Invalid email or password");
       console.error("Login error:", err);
