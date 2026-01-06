@@ -6,16 +6,22 @@ export async function middleware(request: NextRequest) {
 
   // Proteger rutas admin (excepto /admin/login que redirige a /login)
   if (pathname.startsWith("/admin") && pathname !== "/admin/login") {
+    // En producción, Better Auth usa el prefijo __Secure- por seguridad
+    const cookieName = process.env.NODE_ENV === "production"
+      ? "__Secure-better-auth.session_token"
+      : "better-auth.session_token";
+
     // Obtener el token de sesión de las cookies
-    const sessionToken = request.cookies.get("better-auth.session_token");
+    const sessionToken = request.cookies.get(cookieName);
 
     // Debug logging para producción
     if (process.env.NODE_ENV === "production") {
       console.log("Middleware check:", {
         pathname,
+        cookieName,
         hasSessionToken: !!sessionToken,
         tokenValue: sessionToken?.value ? "exists" : "missing",
-        cookies: request.cookies.getAll().map(c => c.name),
+        allCookies: request.cookies.getAll().map(c => c.name),
       });
     }
 
