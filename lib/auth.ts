@@ -11,14 +11,26 @@ export const auth = betterAuth({
   },
   baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_BASE_URL,
   secret: process.env.BETTER_AUTH_SECRET,
+  trustedOrigins: [
+    process.env.NEXT_PUBLIC_BASE_URL || "",
+    "https://studio-sanz-platform.vercel.app",
+  ].filter(Boolean),
   advanced: {
     cookiePrefix: "better-auth",
     useSecureCookies: process.env.NODE_ENV === "production",
     crossSubDomainCookies: {
       enabled: false,
     },
+    defaultCookieAttributes: {
+      sameSite: "lax",
+      path: "/",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    },
   },
   session: {
+    expiresIn: 60 * 60 * 24 * 7, // 7 días
+    updateAge: 60 * 60 * 24, // 1 día
     cookieCache: {
       enabled: true,
       maxAge: 5 * 60, // 5 minutos
