@@ -9,6 +9,8 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+  baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_BASE_URL,
+  secret: process.env.BETTER_AUTH_SECRET,
   // Agregar otros métodos de autenticación si es necesario
   // socialProviders: {
   //   github: {
